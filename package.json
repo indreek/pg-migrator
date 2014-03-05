@@ -2,7 +2,7 @@
     "name": "pg-migrator",
     "description": "PostgreSQL Migration Tool",
     "version": "1.0.0",
-    "main": "./build/pg-migrator.js",
+    "main": "./src/service/migrator-service.js",
     "directories": {
         "test": "test"
     },
@@ -47,5 +47,8 @@
         "patch",
         "patcher",
         "node-postgres"
-    ]
+    ],
+    "engines": {
+        "node": ">=0.10.24"
+    }
 }
