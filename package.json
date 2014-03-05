@@ -1,0 +1,51 @@
+{
+    "name": "pg-migrator",
+    "description": "PostgreSQL Migration Tool",
+    "version": "1.0.0",
+    "main": "./build/pg-migrator.js",
+    "directories": {
+        "test": "test"
+    },
+    "homepage": "https://github.com/leventkaragol/pg-migrator/",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/leventkaragol/pg-migrator.git"
+    },
+    "bugs": {
+        "url": "https://github.com/leventkaragol/pg-migrator/issues",
+        "email": "leventkaragol@gmail.com"
+    },
+    "author": {
+        "name": "H.Levent KARAGÖL",
+        "email": "leventkaragol@gmail.com",
+        "url": "http://www.jskoleji.com/"
+    },
+    "dependencies": {
+        "pg": "2.x"
+    },
+    "devDependencies": {
+        "pg": "2.x",
+        "jasmine-node": "1.x"
+    },
+    "scripts": {
+        "test": "make test"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "https://github.com/leventkaragol/pg-migrator/raw/master/LICENSE"
+        }
+    ],
+    "keywords": [
+        "pg",
+        "postgres",
+        "postgresql",
+        "migrate",
+        "migration",
+        "pg-migrate",
+        "pg-migration",
+        "patch",
+        "patcher",
+        "node-postgres"
+    ]
+}
