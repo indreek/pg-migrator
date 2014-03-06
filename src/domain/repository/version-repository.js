@@ -1,12 +1,13 @@
 "use strict";
 
-function VersionRepository(persister) {
+function VersionRepository(persister, connectionString) {
     this._persister = persister;
-}
+    this._connectionString = connectionString;
+};
 
 VersionRepository.prototype.constructor = VersionRepository;
 
-VersionRepository.prototype.create = function (succeedCallback, failedCallback) {
+VersionRepository.prototype.createTable = function (succeedCallback, failedCallback) {
 
     this._persister.query("CREATE TABLE version (value INT);INSERT INTO version(value) VALUES(0);", function (err) {
         if (err) {
@@ -18,7 +19,7 @@ VersionRepository.prototype.create = function (succeedCallback, failedCallback) 
     });
 };
 
-VersionRepository.prototype.destroy = function () {
+VersionRepository.prototype.destroyTable = function () {
 
     this._persister.query("DROP TABLE version", function (err) {
         if (err) {
@@ -32,12 +33,12 @@ VersionRepository.prototype.destroy = function () {
 
 VersionRepository.prototype.get = function (succeedCallback, failedCallback) {
 
-    var currentVersion = 0;
+    var currentVersion;
 
-    this._persister.query("SELECT value FROM version WHERE key = 'patch'", function (err, res) {
+    this._persister.query("SELECT value FROM version", function (err, res) {
         if (err) {
             if ('' + err === 'error: relation "version" does not exist') {
-                return succeedCallback(currentVersion);
+                return succeedCallback(-1);
             }
 
             return failedCallback(err);

@@ -1,0 +1,69 @@
+#!/usr/bin/env node
+
+var fs = require("fs");
+var path = require("path");
+var colors = require("colors");
+var pg = require("pg");
+var _ = require("underscore");
+var MigratiorService = require("./application/service/migrator-service");
+var ScriptService = require("./domain/service/script-service");
+var VersionService = require("./domain/service/version-service");
+var ScriptRepository = require("./domain/repository/script-repository");
+var VersionRepository = require("./domain/repository/version-repository");
+var messages = require("./infrastructure/messages");
+
+var args = process.argv.slice(2);
+
+var targetVersion = 0;
+
+if (args.length == 0) {
+
+    console.log(messages.CONNECTION_STRING_MUST_BE_PROVIDED.red);
+
+    process.exit(1);
+}
+
+var connectionString = args[0];
+
+if (args.length > 1) {
+
+    if (isNaN(args[1])) {
+
+        console.log(messages.INVALID_TARGET_VERSION.red);
+
+        process.exit(1);
+    }
+
+    targetVersion = args[1];
+}
+
+var persister = new pg.Client(connectionString);
+
+persister.connect(function (err) {
+
+    if (err) {
+        return console.error('could not connect to postgres', err);
+    }
+    var migratiorService = new MigratiorService(
+        new ScriptService(new ScriptRepository(fs), path),
+        new VersionService(new VersionRepository(persister, connectionString), messages),
+        messages,
+        _);
+
+    migratiorService.migrate(__dirname, targetVersion, function () {
+
+        persister.end();
+
+        process.exit(0);
+
+    }, function (err) {
+
+        persister.end();
+
+        if (err) {
+            console.log(err);
+        }
+
+        process.exit(1);
+    });
+});

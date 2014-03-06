@@ -21,10 +21,11 @@
         "url": "http://www.jskoleji.com/"
     },
     "dependencies": {
-        "pg": "2.x"
+        "pg": "2.x",
+        "underscore": "1.x",
+        "colors": "0.6.2"
     },
     "devDependencies": {
-        "pg": "2.x",
         "jasmine-node": "1.x"
     },
     "scripts": {

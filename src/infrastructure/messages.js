@@ -1,6 +1,11 @@
 "use strict";
 
 module.exports = {
-    GETTING_CURRENT_VERSION: "Getting Current Version",
-    VERSION_TABLE_DOES_NOT_EXIST: "Version table does not exist, will be created for the first time"
+    CURRENT_VERSION: "Current Version : ",
+    TARGET_VERSION: "Target Version : ",
+    FIRST_INITIALIZE: "\"version\" table does not exist, will be created for the first time",
+    CONNECTION_STRING_MUST_BE_PROVIDED: "ConnectionString must be provided",
+    INVALID_TARGET_VERSION: "Target version parameter must be;\n* a valid number to migrate it\n* or -1 to roll one step back\n* or empty to migrate to the latest version available",
+    ALREADY_MIGRATED: "Database is already migrated to the target version",
+    MIGRATION_SCRIPT_NOT_FOUND: "There is no migration script file in current folder and subfolders"
 };
