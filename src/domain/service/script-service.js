@@ -7,11 +7,11 @@ function ScriptService(scriptRepository, path) {
 
 ScriptService.prototype.constructor = ScriptService;
 
-ScriptService.prototype.get = function (path) {
+ScriptService.prototype.get = function get(path) {
     return this._scriptRepository.get(path);
 };
 
-ScriptService.prototype.getList = function (currentPath) {
+ScriptService.prototype.getList = function getList(currentPath) {
 
     var sqlFiles = [];
 
@@ -59,7 +59,7 @@ ScriptService.prototype.getList = function (currentPath) {
     return sqlFiles;
 };
 
-ScriptService.prototype.execute = function (query, succeedCallback, failedCallback) {
+ScriptService.prototype.execute = function execute(query, succeedCallback, failedCallback) {
 
     this._scriptRepository.execute(query, succeedCallback, failedCallback);
 };

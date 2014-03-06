@@ -6,7 +6,7 @@ function VersionRepository(persister) {
 
 VersionRepository.prototype.constructor = VersionRepository;
 
-VersionRepository.prototype.createTable = function (succeedCallback, failedCallback) {
+VersionRepository.prototype.createTable = function createTable(succeedCallback, failedCallback) {
 
     this._persister.query("CREATE TABLE version (value INT);INSERT INTO version(value) VALUES(1);", function (err) {
         if (err) {
@@ -18,7 +18,7 @@ VersionRepository.prototype.createTable = function (succeedCallback, failedCallb
     });
 };
 
-VersionRepository.prototype.get = function (succeedCallback, failedCallback) {
+VersionRepository.prototype.get = function get(succeedCallback, failedCallback) {
 
     var currentVersion;
 
@@ -37,7 +37,7 @@ VersionRepository.prototype.get = function (succeedCallback, failedCallback) {
     });
 };
 
-VersionRepository.prototype.update = function (version, succeedCallback, failedCallback) {
+VersionRepository.prototype.update = function update(version, succeedCallback, failedCallback) {
 
     this._persister.query("UPDATE version SET value = $1", [version], function (err) {
         if (err) {

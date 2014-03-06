@@ -9,7 +9,7 @@ function MigratorService(scriptService, versionService, messages, _) {
 
 MigratorService.prototype.constructor = MigratorService;
 
-MigratorService.prototype.migrate = function (currentPath, targetVersion, succeedCallback, failedCallback) {
+MigratorService.prototype.migrate = function migrate(currentPath, targetVersion, succeedCallback, failedCallback) {
 
     var scriptService = this._scriptService;
     var versionService = this._versionService;

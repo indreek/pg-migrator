@@ -7,7 +7,7 @@ function VersionService(versionRepository, messages) {
 
 VersionService.prototype.constructor = VersionService;
 
-VersionService.prototype.get = function (succeedCallback, failedCallback) {
+VersionService.prototype.get = function get(succeedCallback, failedCallback) {
 
     var versionRepository = this._versionRepository;
     var messages = this._messages;
@@ -29,7 +29,7 @@ VersionService.prototype.get = function (succeedCallback, failedCallback) {
     }, failedCallback);
 };
 
-VersionService.prototype.update = function (version, succeedCallback, failedCallback) {
+VersionService.prototype.update = function update(version, succeedCallback, failedCallback) {
 
     this._versionRepository.update(version, succeedCallback, failedCallback);
 };
