@@ -1,27 +1,14 @@
 "use strict";
 
-function VersionRepository(persister, connectionString) {
+function VersionRepository(persister) {
     this._persister = persister;
-    this._connectionString = connectionString;
-};
+}
 
 VersionRepository.prototype.constructor = VersionRepository;
 
 VersionRepository.prototype.createTable = function (succeedCallback, failedCallback) {
 
-    this._persister.query("CREATE TABLE version (value INT);INSERT INTO version(value) VALUES(0);", function (err) {
-        if (err) {
-
-            return failedCallback(err);
-        }
-
-        return succeedCallback();
-    });
-};
-
-VersionRepository.prototype.destroyTable = function () {
-
-    this._persister.query("DROP TABLE version", function (err) {
+    this._persister.query("CREATE TABLE version (value INT);INSERT INTO version(value) VALUES(1);", function (err) {
         if (err) {
 
             return failedCallback(err);

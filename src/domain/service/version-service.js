@@ -3,7 +3,7 @@
 function VersionService(versionRepository, messages) {
     this._versionRepository = versionRepository;
     this._messages = messages;
-};
+}
 
 VersionService.prototype.constructor = VersionService;
 
@@ -16,11 +16,11 @@ VersionService.prototype.get = function (succeedCallback, failedCallback) {
 
         if (currentVersion == -1) {
 
-            console.log(messages.FIRST_INITIALIZE.yellow);
+            console.log(messages.FIRST_INITIALIZE.warn);
 
             versionRepository.createTable(function () {
 
-                succeedCallback(0);
+                succeedCallback(1);
             }, failedCallback);
         }
         else {
@@ -29,14 +29,9 @@ VersionService.prototype.get = function (succeedCallback, failedCallback) {
     }, failedCallback);
 };
 
-VersionService.prototype.increase = function (version) {
+VersionService.prototype.update = function (version, succeedCallback, failedCallback) {
 
-    throw "Not Implemented";
-};
-
-VersionService.prototype.decrease = function (version) {
-
-    throw "Not Implemented";
+    this._versionRepository.update(version, succeedCallback, failedCallback);
 };
 
 module.exports = VersionService;

@@ -3,9 +3,13 @@
 function ScriptService(scriptRepository, path) {
     this._scriptRepository = scriptRepository;
     this._path = path;
-};
+}
 
 ScriptService.prototype.constructor = ScriptService;
+
+ScriptService.prototype.get = function (path) {
+    return this._scriptRepository.get(path);
+};
 
 ScriptService.prototype.getList = function (currentPath) {
 
@@ -53,6 +57,11 @@ ScriptService.prototype.getList = function (currentPath) {
     }
 
     return sqlFiles;
+};
+
+ScriptService.prototype.execute = function (query, succeedCallback, failedCallback) {
+
+    this._scriptRepository.execute(query, succeedCallback, failedCallback);
 };
 
 module.exports = ScriptService;
