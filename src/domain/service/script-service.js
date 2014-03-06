@@ -46,7 +46,7 @@ ScriptService.prototype.getList = function getList(currentPath) {
                 var baseVersion = fileName.substr(0, fileName.indexOf("-"));
                 var targetVersion = fileName.substr(fileName.indexOf("-") + 1);
 
-                if (baseVersion == "" || targetVersion == "" || isNaN(baseVersion) || isNaN(targetVersion)) {
+                if (!baseVersion || !targetVersion || isNaN(baseVersion) || isNaN(targetVersion)) {
 
                     continue;
                 }

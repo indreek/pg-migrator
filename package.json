@@ -2,7 +2,10 @@
     "name": "pg-migrator",
     "description": "PostgreSQL Migration Tool",
     "version": "1.0.0",
-    "main": "./src/service/migrator-service.js",
+    "main": "src",
+    "bin": {
+        "pg-migrator": "src/pg-migrator"
+    },
     "directories": {
         "test": "test"
     },
@@ -23,7 +26,7 @@
     "dependencies": {
         "pg": "2.x",
         "underscore": "1.x",
-        "colors": "0.6.2"
+        "colors": "0.6.x"
     },
     "devDependencies": {
         "jasmine-node": "1.x"
@@ -43,13 +46,15 @@
         "postgresql",
         "migrate",
         "migration",
+        "migrator",
         "pg-migrate",
         "pg-migration",
+        "pg-migrator",
         "patch",
         "patcher",
-        "node-postgres"
-    ],
-    "engines": {
-        "node": ">=0.10.24"
-    }
+        "pg-patch",
+        "pg-patcher",
+        "node-postgres",
+        "node-postgresql"
+    ]
 }

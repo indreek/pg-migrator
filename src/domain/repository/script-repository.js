@@ -17,7 +17,7 @@ ScriptRepository.prototype.execute = function execute(query, succeedCallback, fa
             console.log(err);
             return failedCallback(err);
         }
-        console.log("ok");
+
         return succeedCallback();
     });
 };

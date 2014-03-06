@@ -23,9 +23,7 @@ MigratorService.prototype.migrate = function migrate(currentPath, targetVersion,
     if (fileList.length == 0) {
         console.log(messages.MIGRATION_SCRIPT_NOT_FOUND.error);
 
-        failedCallback();
-
-        return;
+        return failedCallback();
     }
 
     versionService.get(function (currentVersion) {
@@ -41,9 +39,7 @@ MigratorService.prototype.migrate = function migrate(currentPath, targetVersion,
             if (currentVersion == 1) {
                 console.log(messages.NO_MORE_ROLLBACK.error);
 
-                failedCallback();
-
-                return;
+                return failedCallback();
             }
 
             targetVersion = currentVersion - 1;
@@ -55,9 +51,7 @@ MigratorService.prototype.migrate = function migrate(currentPath, targetVersion,
         if (currentVersion == targetVersion) {
             console.log(messages.ALREADY_MIGRATED.warn);
 
-            failedCallback();
-
-            return;
+            return failedCallback();
         }
 
         if (currentVersion < targetVersion) {
@@ -68,9 +62,7 @@ MigratorService.prototype.migrate = function migrate(currentPath, targetVersion,
                 if (!file) {
                     console.log((messages.FILE_NOT_FOUND + i + "-" + (i + 1) + ".sql").error);
 
-                    failedCallback();
-
-                    return;
+                    return failedCallback();
                 }
                 else {
 
@@ -78,13 +70,13 @@ MigratorService.prototype.migrate = function migrate(currentPath, targetVersion,
 
                     scriptService.execute(fileContent, function () {
 
-                        console.log("------------------------------------------------".grey);
+                        console.log("--------------------------------------------------".grey);
 
-                        console.log(fileContent);
+                        console.log(fileContent.white);
 
                         console.log((i + "-" + (i + 1) + ".sql executed").info);
 
-                        console.log("------------------------------------------------".grey);
+                        console.log("--------------------------------------------------".grey);
 
                     }, function (err) {
                         return failedCallback(err)
@@ -100,9 +92,8 @@ MigratorService.prototype.migrate = function migrate(currentPath, targetVersion,
                 if (!file) {
                     console.log((messages.FILE_NOT_FOUND + i + "-" + (i - 1) + ".sql").error);
 
-                    failedCallback();
+                    return failedCallback();
 
-                    return;
                 }
                 else {
 
@@ -110,13 +101,13 @@ MigratorService.prototype.migrate = function migrate(currentPath, targetVersion,
 
                     scriptService.execute(fileContent, function () {
 
-                        console.log("------------------------------------------------".grey);
+                        console.log("--------------------------------------------------".grey);
 
-                        console.log(fileContent);
+                        console.log(fileContent.white);
 
                         console.log((i + "-" + (i - 1) + ".sql executed").info);
 
-                        console.log("------------------------------------------------".grey);
+                        console.log("--------------------------------------------------".grey);
 
                     }, function (err) {
                         return failedCallback(err)
