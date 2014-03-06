@@ -1,0 +1,94 @@
+#!/usr/bin/env node
+
+"use strict";
+
+var fs = require("fs");
+var path = require("path");
+var colors = require("colors");
+var pg = require("pg");
+var _ = require("underscore");
+var ValidationService = require("../lib/application/service/validation-service");
+var MigratiorService = require("../lib/application/service/migrator-service");
+var ScriptService = require("../lib/domain/service/script-service");
+var VersionService = require("../lib/domain/service/version-service");
+var ScriptRepository = require("../lib/domain/repository/script-repository");
+var VersionRepository = require("../lib/domain/repository/version-repository");
+var messages = require("../lib/infrastructure/messages");
+
+colors.setTheme({
+    verbose: 'cyan',
+    info: 'green',
+    warn: 'yellow',
+    error: 'red'
+});
+
+// First argument : connectionString (mandatory)
+// Second argument : target version (optional)
+var args = process.argv.slice(2);
+
+// Validation for args
+new ValidationService(messages).validate(args, function (connectionString, targetVersion) {
+
+    var persister = new pg.Client(connectionString);
+
+    // Connecting to PostgreSQL
+    persister.connect(function (err) {
+
+        if (err) {
+            // Could not connect to PostgreSQL
+            console.error((messages.CONNECTION_ERROR + err).error);
+
+            process.exit(1);
+        }
+
+        // Starting transaction
+        persister.query("BEGIN", function (err) {
+
+            if (err) {
+                // Transaction could not be started
+                console.log(err);
+
+                process.exit(1);
+            }
+
+            // Service definition with dependency injection
+            var migratiorService = new MigratiorService(
+                new ScriptService(new ScriptRepository(fs, persister), path),
+                new VersionService(new VersionRepository(persister), messages),
+                messages,
+                _);
+
+            migratiorService.migrate(".", targetVersion, function (currentVersion) {
+
+                // Migration has been completed successfully, committing the transaction
+                persister.query('COMMIT', function () {
+
+                    persister.end();
+
+                    console.log("--------------------------------------------------".grey);
+                    console.log((messages.MIGRATION_COMPLETED + currentVersion).info);
+
+                    process.exit(0);
+                });
+
+            }, function (err) {
+
+                // Migration failed, rolling back the transaction
+                persister.query('ROLLBACK', function () {
+
+                    persister.end();
+
+                    if (err) {
+                        console.log(err);
+                    }
+
+                    process.exit(1);
+                });
+            });
+        });
+    });
+
+}, function () {
+    // Validation error
+    process.exit(1);
+});

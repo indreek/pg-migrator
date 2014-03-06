@@ -2,9 +2,9 @@
     "name": "pg-migrator",
     "description": "PostgreSQL Migration Tool",
     "version": "1.0.0",
-    "main": "src",
+    "main": "lib",
     "bin": {
-        "pg-migrator": "src/pg-migrator"
+        "pg-migrator": "bin/pg-migrator"
     },
     "directories": {
         "test": "test"
