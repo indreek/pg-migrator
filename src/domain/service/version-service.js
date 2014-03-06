@@ -1,6 +1,7 @@
 "use strict";
 
-function VersionService() {
+function VersionService(versionRepository) {
+    this._versionRepository = versionRepository;
 }
 
 VersionService.prototype.constructor = VersionService;

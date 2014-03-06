@@ -1,6 +1,8 @@
 "use strict";
 
-function MigratorService() {
+function MigratorService(versionService, fileService) {
+    this._versionService = versionService;
+    this._fileService = fileService;
 }
 
 MigratorService.prototype.constructor = MigratorService;
