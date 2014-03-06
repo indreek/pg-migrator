@@ -56,34 +56,44 @@ persister.connect(function (err) {
         process.exit(1);
     }
 
-    persister.query("BEGIN");
+    persister.query("BEGIN", function (err) {
 
-    var migratiorService = new MigratiorService(
-        new ScriptService(new ScriptRepository(fs, persister), path),
-        new VersionService(new VersionRepository(persister), messages),
-        messages,
-        _);
-
-    migratiorService.migrate(__dirname, targetVersion, function () {
-
-        persister.query('COMMIT', function () {
-
-            persister.end();
-
-            process.exit(0);
-        });
-
-    }, function (err) {
-
-        persister.query('ROLLBACK', function () {
-
-            persister.end();
-
-            if (err) {
-                console.log(err);
-            }
+        if (err) {
+            console.log(err);
 
             process.exit(1);
+        }
+
+        var migratiorService = new MigratiorService(
+            new ScriptService(new ScriptRepository(fs, persister), path),
+            new VersionService(new VersionRepository(persister), messages),
+            messages,
+            _);
+
+        migratiorService.migrate(__dirname, targetVersion, function (currentVersion) {
+
+            persister.query('COMMIT', function () {
+
+                persister.end();
+
+                console.log("--------------------------------------------------".grey);
+                console.log((messages.MIGRATION_COMPLETED + currentVersion).info);
+
+                process.exit(0);
+            });
+
+        }, function (err) {
+
+            persister.query('ROLLBACK', function () {
+
+                persister.end();
+
+                if (err) {
+                    console.log(err);
+                }
+
+                process.exit(1);
+            });
         });
     });
 });

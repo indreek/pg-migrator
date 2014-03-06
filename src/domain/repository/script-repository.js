@@ -8,13 +8,15 @@ function ScriptRepository(fs, persister) {
 ScriptRepository.prototype.constructor = ScriptRepository;
 
 ScriptRepository.prototype.get = function get(path) {
+
     return this._fs.readFileSync(path, "utf8");
 };
 
 ScriptRepository.prototype.execute = function execute(query, succeedCallback, failedCallback) {
+
     this._persister.query(query, function (err) {
+
         if (err) {
-            console.log(err);
             return failedCallback(err);
         }
 
@@ -23,10 +25,12 @@ ScriptRepository.prototype.execute = function execute(query, succeedCallback, fa
 };
 
 ScriptRepository.prototype.getList = function getList(path) {
+
     return this._fs.readdirSync(path);
 };
 
 ScriptRepository.prototype.getStat = function getStat(path) {
+
     return this._fs.statSync(path)
 };
 

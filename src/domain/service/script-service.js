@@ -8,6 +8,7 @@ function ScriptService(scriptRepository, path) {
 ScriptService.prototype.constructor = ScriptService;
 
 ScriptService.prototype.get = function get(path) {
+
     return this._scriptRepository.get(path);
 };
 
@@ -35,6 +36,7 @@ ScriptService.prototype.getList = function getList(currentPath) {
 
             // Files must have an extension with ".sql" (case insensitive)
             // with and "x-y.sql" format that x and y must be valid numbers
+            // All other files will be ignored
             if (this._path.extname(fullPath).toUpperCase() == ".SQL") {
 
                 var fileName = this._path.basename(fullPath, '.sql');

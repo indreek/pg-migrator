@@ -12,10 +12,9 @@ VersionService.prototype.get = function get(succeedCallback, failedCallback) {
     var versionRepository = this._versionRepository;
     var messages = this._messages;
 
-    versionRepository.get(function (currentVersion) {
-
-        if (currentVersion == -1) {
-
+    versionRepository.checkTable(function (exists) {
+        
+        if (!exists) {
             console.log(messages.FIRST_INITIALIZE.warn);
 
             versionRepository.createTable(function () {
@@ -24,7 +23,10 @@ VersionService.prototype.get = function get(succeedCallback, failedCallback) {
             }, failedCallback);
         }
         else {
-            succeedCallback(currentVersion);
+            versionRepository.get(function (currentVersion) {
+
+                succeedCallback(currentVersion);
+            }, failedCallback);
         }
     }, failedCallback);
 };
