@@ -5,12 +5,6 @@ pg-migrator
 
 The complete and easy to use command-line Migration solution for [PostgreSQL](http://www.postgresql.org/).
 
-## Installation
-
-Install this globally and you'll have access to the pg-migrator command anywhere on your system.
-
-    $ npm install -g pg-migrator
-
 ## Features
 
   * Auto migration from scratch to up to date
@@ -18,6 +12,12 @@ Install this globally and you'll have access to the pg-migrator command anywhere
   * Step by step backward migration
   * Migrate to a specific version forward or backward
   * Subfolder search for migration scripts
+
+## Installation
+
+Install this globally and you'll have access to the pg-migrator command anywhere on your system.
+
+    $ npm install -g pg-migrator
 
 ## Quick Start
 
