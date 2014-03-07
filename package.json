@@ -54,6 +54,10 @@
         "patcher",
         "pg-patch",
         "pg-patcher",
+        "db",
+        "database",
+        "database migration",
+        "database migrator",
         "node-postgres",
         "node-postgresql"
     ]
