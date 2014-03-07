@@ -24,4 +24,32 @@ Install this globally and you'll have access to the pg-migrator command anywhere
 
 ## Quick Start
 
- pg-migrator
+The quickest way to migrate the target database with pg-migrator is type "pg-migrator" and a valid connection string as shown below.
+
+    $ pg-migrator postgres://username:password@localhost/testdb
+
+This command will migrate the "testdb" database to the latest version according to migration scripts.
+
+You can also chose the target version with a second parameter as shown below.
+
+    $ pg-migrator postgres://username:password@localhost/testdb 15
+
+This command will migrate the "testdb" database to version 15 (forward or backward according to current database version). Other avaliable version options shown below.
+
+  * +1 : One step forward migration
+  * -1 : One step backward migration
+
+    $ pg-migrator postgres://username:password@localhost/testdb +1
+    $ pg-migrator postgres://username:password@localhost/testdb -1
+
+## Migration Scripts
+
+pg-migrator uses migration scripts in current execution folder or subfolders. All migration scripts files must have an extension with ".sql" (case insensitive) with and "x-y.sql" format that x and y must be valid numbers. Both numbers also must be sequential. All other files will be ignored.
+
+Sample migration script file names;
+```
+25-26.sql : Migration script from version 25 to version 26 for forward migration
+26-25.sql : Migration script from version 26 to version 25 for backward migration
+```
+
+You can find sample migration script file in the "examples" folder
