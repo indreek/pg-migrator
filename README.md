@@ -11,8 +11,9 @@ The complete and easy to use command-line Migration solution for [PostgreSQL](ht
   * Step by step forward migration
   * Step by step backward migration
   * Migrate to a specific version forward or backward
-  * Subfolder search for migration scripts
-
+  * Subfolder deep search for migration scripts
+  * All or nothing (Transactional migration)
+  * Can use on any system that can connect to target PostgreSQL database
 
 
 ## Installation
