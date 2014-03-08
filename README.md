@@ -300,8 +300,8 @@ Fire at will! You can take a stroll between db versions with pg-migrator.
 * pg-migrator must be executed in the root of migration scripts folder. It will search all directory content and all subfolders content recursively.
 * Migration script files must be in "x-y.sql" format that x and y must be valid numbers. Both numbers also must be sequential. All other files will be ignored.
 * All script files also must be sequential like "1-2.sql" and "2-3.sql" .There must not be hole between files (Like "1-2.sql" and "3-4.sql").
-* All migrations scripts are executed in same transaction scope and totally roll back in case of fail so you shouldn't put any transaction statements in your scripts.
-* You should use a db user with sufficient permission according to your script content.
+* All migration scripts are executed in the same transaction scope and totally roll back in case of fail so you shouldn't put any transaction statements in your scripts.
+* You should use a db user with sufficient permissions according to your script content.
 
 ## Running Tests
 
