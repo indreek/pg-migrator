@@ -289,6 +289,8 @@ Ok, that's enough. let's return to the latest version with the following command
 
 <img src="http://4.bp.blogspot.com/-tqD_3x5hH18/UxuEPzfNlaI/AAAAAAAAUiw/0MsT9u_JH4g/s1600/Selection_011.png">
 
+pg-migrator finds and executes "3-4.sql" and then "4-5.sql" scripts and migrates db to version 5.
+
 <img src="http://3.bp.blogspot.com/-Xxl41LWmAPo/UxuETU8A4OI/AAAAAAAAUi4/cf6151-lf2w/s1600/Selection_012.png">
 
 
