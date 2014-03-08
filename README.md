@@ -71,6 +71,178 @@ You can find sample migration script file in the "examples" folder
 
 Let's go step by step from the scratch.
 
+As a first step, we need a database. Let's create a new database with "testdb" name. At the moment, there is no table this db.
+
+IMAGE
+
+As a beginning to development, we need two tables, "user" and "user_login_history". Let's write some script to create them but don't execute it yet. We'll use pg-migratior for execution.
+
+```
+/*** Add user and user_login_history tables and insert some data ***/
+
+CREATE TABLE "user"
+(
+   id serial,
+   username character(20)  NOT NULL,
+   name_surname character(50) NOT NULL,
+   CONSTRAINT pk_user PRIMARY KEY (id),
+   CONSTRAINT uk_user UNIQUE (username)
+)
+WITH (
+  OIDS = FALSE
+);
+
+CREATE TABLE "user_login_history"
+(
+   id serial,
+   user_id integer NOT NULL,
+   login_date date NOT NULL,
+   CONSTRAINT pk_user_login_history PRIMARY KEY (id),
+   CONSTRAINT fk_user_login_history FOREIGN KEY (user_id) REFERENCES "user" (id) ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS = FALSE
+);
+
+INSERT INTO "user"(username, name_surname)
+    VALUES ('user1', 'User 1');
+
+INSERT INTO "user"(username, name_surname)
+    VALUES ('user2', 'User 2');
+
+INSERT INTO user_login_history(user_id, login_date)
+    VALUES (1, '2014-01-01');
+
+INSERT INTO user_login_history(user_id, login_date)
+    VALUES (1, '2014-01-02');
+
+INSERT INTO user_login_history(user_id, login_date)
+    VALUES (2, '2014-02-01');
+
+INSERT INTO user_login_history(user_id, login_date)
+    VALUES (2, '2014-02-02');
+
+```
+
+With this script, we're creating two tables and insert some data to them. Let's save this script with "1-2.sql" name. When this script executed, our database will be migrated from version 1 to version 2 (Forward migration).
+
+Ok, that was the first one and we need an opposite script in case of roll back this operation. This script can be written like below.
+
+```
+/*** Remove user and user_login_history tables ***/
+
+DROP TABLE "user_login_history";
+
+DROP TABLE "user";
+
+```
+
+That was quite easy, just deleted all tables. We'll save this script with "2-1.sql". When this script executed, our database will be migrated from version 2 to version 1 (Backward migration).
+
+Ok, let's continue to development. At this time, we need to add a new column to user table with "is_admin" name so write the script below and save it with "2-3.sql".
+
+```
+/*** Add is_admin column to user table ***/
+
+ALTER TABLE "user"
+  ADD COLUMN is_admin bit;
+
+UPDATE "user" SET is_admin = '0'
+
+ALTER TABLE "user"
+   ALTER COLUMN is_admin SET NOT NULL;
+```
+
+Why don't we just add a new column with NOT NULL keyword directly? Because during two versions, some data may be inserted into the table so we can't create a new column with NOT NULL property. So, we've created a new column with NULL property, update all posible data to a default value then alter the column with NOT NULL property (Of course, you can define a default value for the new column but this property will stay on the column. This way is much more reasonable for production).
+
+We need a roll back script again. Let's save the script below with "3-2.sql" name. This will just drop the new inserted column.
+
+```
+/*** Remove is_admin column from user table ***/
+
+ALTER TABLE "user" DROP COLUMN is_admin;
+
+```
+
+Continue to development. We need a new table with "company" name and connect it with existing "user" table. So write the script below and save it with "3-4.sql".
+
+```
+/*** Add company table, insert some data and connect with user table ***/
+
+CREATE TABLE "company"
+(
+   id serial,
+   company_name character(20) NOT NULL,
+   CONSTRAINT pk_company PRIMARY KEY (id),
+   CONSTRAINT uk_company UNIQUE (company_name)
+)
+WITH (
+  OIDS = FALSE
+);
+
+INSERT INTO "company"(company_name)
+    VALUES ('Company 1');
+
+ALTER TABLE "user"
+  ADD COLUMN company_id integer;
+
+UPDATE "user" SET company_id = 1
+
+ALTER TABLE "user"
+   ALTER COLUMN company_id SET NOT NULL;
+
+ALTER TABLE "user"
+  ADD CONSTRAINT fk_user FOREIGN KEY (company_id) REFERENCES company (id) ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+```
+Not confused yet? Ok, I'll do my best :)
+
+We have just created a new table, insert some data in it. Add a new column to the "user" table and connect it to the new table with a foreign key.
+
+Let's write a roll back script and save as "4-3.sql". We have just delete foreign key, new added column and the table.
+
+```
+/*** Remove company table and disconnect user table ***/
+
+ALTER TABLE "user" DROP CONSTRAINT fk_user;
+
+ALTER TABLE "user" DROP COLUMN company_id;
+
+DROP TABLE "company";
+
+```
+Before start the show, we will create a last script. This time for performance tuning. Let's create a few index with the following script (4-5.sql).
+
+```
+/*** Create indexes for user and company tables ***/
+
+CREATE INDEX ix_user
+   ON "user" (username ASC NULLS LAST);
+
+CREATE INDEX ix_company
+   ON "company" (company_name ASC NULLS LAST);
+
+```
+
+And the roll back script (4-4.sql).
+
+```
+/*** Remove indexes from user and company tables ***/
+
+DROP INDEX ix_user;
+
+DROP INDEX ix_company;
+
+```
+
+That all. We can start to use pg-migrator now. Because pg-migrator can seek and execute migration script in any subfolders, I will categorize scripts like below.
+
+IMAGE
+
+
+
+
+
 
 ## Common Pitfalls
 * pg-migrator must be executed in the root of migration scripts folder. It will search all directory content and all subfolders content recursively.
