@@ -124,7 +124,7 @@ INSERT INTO user_login_history(user_id, login_date)
 
 ```
 
-With this script, we're creating two tables and insert some data to them. Let's save this script with "1-2.sql" name. When this script executed, our database will be migrated from version 1 to version 2 (Forward migration).
+With this script, we're creating two tables and insert some data to them. Let's save this script with "**1-2.sql**" name. When this script executed, our database will be migrated from version 1 to version 2 (Forward migration).
 
 Ok, that was the first one and we need an opposite script in case of roll back this operation. This script can be written like below.
 
@@ -137,9 +137,9 @@ DROP TABLE "user";
 
 ```
 
-That was quite easy, just deleted all tables. We'll save this script with "2-1.sql". When this script executed, our database will be migrated from version 2 to version 1 (Backward migration).
+That was quite easy, just deleted all tables. We'll save this script with "**2-1.sql**". When this script executed, our database will be migrated from version 2 to version 1 (Backward migration).
 
-Ok, let's continue to development. At this time, we need to add a new column to user table with "is_admin" name so write the script below and save it with "2-3.sql".
+Ok, let's continue to development. At this time, we need to add a new column to user table with "is_admin" name so write the script below and save it with "**2-3.sql**".
 
 ```
 /*** Add is_admin column to user table ***/
@@ -155,7 +155,7 @@ ALTER TABLE "user"
 
 Why don't we just add a new column with NOT NULL keyword directly? Because during two versions, some data may be inserted into the table so we can't create a new column with NOT NULL property. So, we've created a new column with NULL property, update all posible data to a default value then alter the column with NOT NULL property (Of course, you can define a default value for the new column but this property will stay on the column. This way is much more reasonable for production).
 
-We need a roll back script again. Let's save the script below with "3-2.sql" name. This will just drop the new inserted column.
+We need a roll back script again. Let's save the script below with "**3-2.sql**" name. This will just drop the new inserted column.
 
 ```
 /*** Remove is_admin column from user table ***/
@@ -164,7 +164,7 @@ ALTER TABLE "user" DROP COLUMN is_admin;
 
 ```
 
-Continue to development. We need a new table with "company" name and connect it with existing "user" table. So write the script below and save it with "3-4.sql".
+Continue to development. We need a new table with "company" name and connect it with existing "user" table. So write the script below and save it with "**3-4.sql**".
 
 ```
 /*** Add company table, insert some data and connect with user table ***/
@@ -199,7 +199,7 @@ Not confused yet? Ok, I'll do my best :)
 
 We have just created a new table, insert some data in it. Add a new column to the "user" table and connect it to the new table with a foreign key.
 
-Let's write a roll back script and save as "4-3.sql". We have just delete foreign key, new added column and the table.
+Let's write a roll back script and save as "**4-3.sql**". We have just delete foreign key, new added column and the table.
 
 ```
 /*** Remove company table and disconnect user table ***/
@@ -211,7 +211,7 @@ ALTER TABLE "user" DROP COLUMN company_id;
 DROP TABLE "company";
 
 ```
-Before start the show, we will create a last script. This time for performance tuning. Let's create a few index with the following script (4-5.sql).
+Before start the show, we will create a last script. This time for performance tuning. Let's create a few index with the following script (**4-5.sql**).
 
 ```
 /*** Create indexes for user and company tables ***/
@@ -224,7 +224,7 @@ CREATE INDEX ix_company
 
 ```
 
-And the roll back script (4-4.sql).
+And the roll back script (**5-4.sql**).
 
 ```
 /*** Remove indexes from user and company tables ***/
