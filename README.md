@@ -1,7 +1,7 @@
 pg-migrator
 ===========
 
-The complete and easy to use command-line Migration solution for [PostgreSQL](http://www.postgresql.org/).
+The complete and easy to use command-line migration tool for [PostgreSQL](http://www.postgresql.org/).
 
 ## Features
 
@@ -13,7 +13,7 @@ The complete and easy to use command-line Migration solution for [PostgreSQL](ht
   * Migrate to a specific version forward or backward
   * Subfolder deep search for migration scripts
   * All or nothing (Transactional migration)
-  * Can use on any system that can connect to target PostgreSQL database
+  * Can use on any system that can connect to target PostgreSQL database (No remote session required)
 
 
 ## Installation
@@ -46,11 +46,11 @@ Samples for one step migration;
 
 ## Migration Scripts
 
-pg-migrator uses migration scripts in current execution folder or subfolders. All migration scripts files must have an extension with ".sql" (case insensitive) and "x-y.sql" format that x and y must be valid numbers. Both numbers also must be sequential. All other files will be ignored.
+pg-migrator uses migration scripts in current execution folder or subfolders. All migration script files must have an extension with ".sql" (case insensitive) and "x-y.sql" format that x and y must be valid numbers. Both numbers also must be sequential. All other files will be ignored.
 
-Migration scripts can contain any valid sql statements like create/alter table and also insert/update etc.
+Migration scripts can contain any valid sql statements like create/alter table and also insert/update data etc.
 
-You can categorize your scripts with folders as you wish. pg-migrator search all subfolders and put them in order according to x-y numbers in file names of folder structure.
+You can categorize your scripts with folders as you wish. pg-migrator search all subfolders and put them in order according to x-y numbers in file names, independent of folder structure.
 
 Sample migration script file names;
 ```
@@ -63,13 +63,11 @@ Likewise, if you request one step backward migration, at this time, pg-migrator 
 
 So, your migration scripts must be started from "1-2.sql" and go on like "2-3.sql", "3-4.sql" etc.
 
-For backward migration, your must also have files like "2-1.sql" and go on like "3-2.sql", "4-3.sql" etc.
-
-You can find sample migration script file in the "examples" folder
+For backward migration, you must also have files like "2-1.sql" and go on like "3-2.sql", "4-3.sql" etc.
 
 ## Step by Step Example
 
-Let's go step by step from the scratch. You can find all migration scripts we will use during this example in the "examples" folder on Github.
+Let's go step by step from the scratch. You can find all migration scripts we will use during this example in the ["examples"](https://github.com/leventkaragol/pg-migrator/tree/master/examples/) folder on Github.
 
 As a first step, we need a database. Let's create a new database with "testdb" name. At the moment, there is no table this db.
 

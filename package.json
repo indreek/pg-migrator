@@ -1,6 +1,6 @@
 {
     "name": "pg-migrator",
-    "description": "PostgreSQL Migration Tool",
+    "description": "The complete and easy to use command-line migration tool for PostgreSQL",
     "version": "1.0.0",
     "main": "lib",
     "bin": {
