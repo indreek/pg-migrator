@@ -69,7 +69,7 @@ For backward migration, you must also have files like "2-1.sql" and go on like "
 
 Let's go step by step from the scratch. You can find all migration scripts we will use during this example in the ["examples"](https://github.com/leventkaragol/pg-migrator/tree/master/examples/) folder on Github.
 
-As a first step, we need a database. Let's create a new database with "testdb" name. At the moment, there is no table this db.
+As a first step, we need a database. Let's create a new database with "testdb" name. At the moment, there is no table in it.
 
 <img src="http://4.bp.blogspot.com/-Z8FWbyIugPc/UxuDiKP1XsI/AAAAAAAAUhg/gTEX0l8QGSg/s1600/Selection_001.png">
 
@@ -122,7 +122,7 @@ INSERT INTO user_login_history(user_id, login_date)
 
 ```
 
-With this script, we're creating two tables and insert some data to them. Let's save this script with "**1-2.sql**" name. When this script executed, our database will be migrated from version 1 to version 2 (Forward migration).
+With this script, we are creating two tables and insert some data to them. Let's save this script as "**1-2.sql**". When this script executed, our database will be migrated from version 1 to version 2 (Forward migration).
 
 Ok, that was the first one and we need an opposite script in case of roll back this operation. This script can be written like below.
 
@@ -135,9 +135,9 @@ DROP TABLE "user";
 
 ```
 
-That was quite easy, just deleted all tables. We'll save this script with "**2-1.sql**". When this script executed, our database will be migrated from version 2 to version 1 (Backward migration).
+That was quite easy, just deleted all the tables. We'll save this script with "**2-1.sql**". When this script executed, our database will be migrated from version 2 to version 1 (Backward migration).
 
-Ok, let's continue to development. At this time, we need to add a new column to user table with "is_admin" name so write the script below and save it with "**2-3.sql**".
+Ok, let's continue to development. At this time, we need to add a new column to user table with "is_admin" name so write the script below and save it as "**2-3.sql**".
 
 ```
 /*** Add is_admin column to user table ***/
@@ -151,9 +151,9 @@ ALTER TABLE "user"
    ALTER COLUMN is_admin SET NOT NULL;
 ```
 
-Why don't we just add a new column with NOT NULL keyword directly? Because during two versions, some data may be inserted into the table so we can't create a new column with NOT NULL property. So, we've created a new column with NULL property, update all posible data to a default value then alter the column with NOT NULL property (Of course, you can define a default value for the new column but this property will stay on the column. This way is much more reasonable for production).
+Why don't we just add a new column with NOT NULL keyword directly? Because between two versions, some data may be inserted into the table so we can't create a new column with NOT NULL property. So, we've created a new column with NULL property, update all posible data to a default value then alter the column with NOT NULL property (Of course, you can define a default value for the new column but this property will stay on the column. This way is much more reasonable for production).
 
-We need a roll back script again. Let's save the script below with "**3-2.sql**" name. This will just drop the new inserted column.
+We need a roll back script again. Let's save the script below as "**3-2.sql**". This will just drop the newly inserted column.
 
 ```
 /*** Remove is_admin column from user table ***/
@@ -162,7 +162,7 @@ ALTER TABLE "user" DROP COLUMN is_admin;
 
 ```
 
-Continue to development. We need a new table with "company" name and connect it with existing "user" table. So write the script below and save it with "**3-4.sql**".
+Continue to development. We need a new table with "company" name and connect it with existing "user" table. So write the script below and save it as "**3-4.sql**".
 
 ```
 /*** Add company table, insert some data and connect with user table ***/
@@ -195,9 +195,9 @@ ALTER TABLE "user"
 ```
 Not confused yet? Ok, I'll do my best :)
 
-We have just created a new table, insert some data in it. Add a new column to the "user" table and connect it to the new table with a foreign key.
+We have just created a new table, inserted some data in it. Added a new column to the "user" table and connected it to the new table with a foreign key.
 
-Let's write a roll back script and save as "**4-3.sql**". We have just delete foreign key, new added column and the table.
+Let's write a roll back script and save as "**4-3.sql**". We have just delete foreign key, newly added column and the table.
 
 ```
 /*** Remove company table and disconnect user table ***/
@@ -209,7 +209,7 @@ ALTER TABLE "user" DROP COLUMN company_id;
 DROP TABLE "company";
 
 ```
-Before start the show, we will create a last script. This time for performance tuning. Let's create a few index with the following script (**4-5.sql**).
+Before start the show, we will create one more script. This time for performance tuning. Let's create a few index with the following script (**4-5.sql**).
 
 ```
 /*** Create indexes for user and company tables ***/
@@ -239,7 +239,7 @@ That all. We can start to use pg-migrator now. Because pg-migrator can seek and 
 
 I have created some script files in "ignored-files" folder. All files in this folder will be ignored by pg-migrator because of "x-y.sql" naming standard.
 
-Let's open a terminal and go into the scripts' root folder and type following command (I have a db user with "test" username and "test" password).
+Let's open a terminal, go into the scripts' root folder and type the following command (I have a db user with "test" username and "test" password).
 
     $ pg-migrator postgres://test:test@localhost/testdb
 
@@ -251,7 +251,7 @@ What happend? All scripts are executed by pg-migratior with "1-2.sql" -> "2-3.sq
 
 All tables and indexes have been created and data inserted. Did you realized a new table with "version" name?
 
-This table belongs to pg-migrator and used to track current db version. There are some other migration tools that track the db current version in some files but this is not reasonable actually. Because these files can easy be deleted or go out of sync with DB. What about if you have multiple servers? I'm strongly recommend track the current version in db because this is the only secure place against out of sync.
+This table belongs to pg-migrator and used to track current db version. There are some other migration tools that track the current db version in some files but this is not reasonable actually. Because these files can easy be deleted or go out of sync with DB. What about if you have multiple servers? I'm strongly recommend track the current version in db because it is the only secure place against out of sync.
 
 Ok, db on version 5 at the moment. But we decided to remove indexes so roll one version back. We can use following command for this task.
 
@@ -273,7 +273,7 @@ pg-migrator finds and executes "4-3.sql" and then "3-2.sql" scripts and roll bac
 
 <img src="http://3.bp.blogspot.com/-fVAQAe44dis/UxuECcqdRoI/AAAAAAAAUiY/wZX6D5ioP4k/s1600/Selection_008.png">
 
-Not bad ha, what's next? Let's go to one step forward with folloeing command.
+Not bad ha, what's next? Let's go to one step forward with the following command.
 
     $ pg-migrator postgres://test:test@localhost/testdb +1
 
@@ -297,7 +297,9 @@ Fire at will! You can take a stroll between db versions with pg-migrator.
 ## Common Pitfalls
 * pg-migrator must be executed in the root of migration scripts folder. It will search all directory content and all subfolders content recursively.
 * Migration script files must be in "x-y.sql" format that x and y must be valid numbers. Both numbers also must be sequential. All other files will be ignored.
+* All script files also must be sequential like "1-2.sql" and "2-3.sql" .There must not be hole between files (Like "1-2.sql" and "3-4.sql").
 * All migrations scripts are executed in same transaction scope and totally roll back in case of fail so you shouldn't put any transaction statements in your scripts.
+* You should use a db user with sufficient permission according to your script content.
 
 ## Running Tests
 
