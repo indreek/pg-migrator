@@ -73,7 +73,7 @@ As a first step, we need a database. Let's create a new one with "testdb" name. 
 
 <img src="http://4.bp.blogspot.com/-Z8FWbyIugPc/UxuDiKP1XsI/AAAAAAAAUhg/gTEX0l8QGSg/s1600/Selection_001.png">
 
-As a beginning to development, we need two tables, "user" and "user_login_history". Let's write some script to create them but don't execute it yet. We'll use pg-migratior for execution.
+As a beginning to development, we need two tables, "user" and "user_login_history". Let's write some script to create them but don't execute it yet. We'll use pg-migrator for execution.
 
 ```
 /*** Add user and user_login_history tables and insert some data ***/
@@ -197,7 +197,7 @@ Not confused yet? Ok, I'll do my best :)
 
 We have just created a new table, inserted some data in it. Added a new column to the "user" table and connected it to the new table with a foreign key.
 
-Let's write a roll back script and save as "**4-3.sql**". We have just delete foreign key, newly added column and the table.
+Let's write a roll back script and save as "**4-3.sql**". We have just deleted foreign key, newly added column and the table.
 
 ```
 /*** Remove company table and disconnect user table ***/
@@ -209,7 +209,7 @@ ALTER TABLE "user" DROP COLUMN company_id;
 DROP TABLE "company";
 
 ```
-Before start the show, we will create one more script. This time for performance tuning. Let's create a few index with the following script (**4-5.sql**).
+Before start the show, we will create a couple of script. This time for performance tuning. Let's create a few index with the following script (**4-5.sql**).
 
 ```
 /*** Create indexes for user and company tables ***/
@@ -245,13 +245,13 @@ Let's open a terminal, go into the scripts' root folder and type the following c
 
 <img src="http://2.bp.blogspot.com/-pRNtmsL6IjA/UxuDoYm3lrI/AAAAAAAAUhw/wJgssYZlD7g/s1600/Selection_003.png">
 
-What happend? All scripts are executed by pg-migratior with "1-2.sql" -> "2-3.sql" -> "3-4.sql" -> "4-5.sql" order. At the moment, db should seem like below.
+What's happend? All scripts are executed by pg-migrator with "1-2.sql" -> "2-3.sql" -> "3-4.sql" -> "4-5.sql" order. At the moment, db should seem like below.
 
 <img src="http://1.bp.blogspot.com/-h3HujYMJ__w/UxuDrOnkc0I/AAAAAAAAUh4/-1Wf85MCl64/s1600/Selection_004.png">
 
-All tables and indexes have been created and data inserted. Did you realized a new table with "version" name?
+All tables and indexes have been created and data inserted. Did you realized a new table with "**version**" name?
 
-This table belongs to pg-migrator and used to track current db version. There are some other migration tools that track the current db version in some files but this is not reasonable actually. Because these files can easy be deleted or go out of sync with DB. What about if you have multiple servers? I'm strongly recommend track the current version in db because it is the only secure place against out of sync.
+This table belongs to pg-migrator and used to track current db version. There are some other migration tools that track the current db version in some files but this is not reasonable actually. Because these files can easy be deleted or go out of sync with DB. What about if you have multiple servers? I'm strongly recommend track the current version in db because it is the **only secure place** against out of sync.
 
 Ok, db on version 5 at the moment. But we decided to remove indexes so roll one version back. We can use following command for this task.
 
