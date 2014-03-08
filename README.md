@@ -5,7 +5,7 @@ The complete and easy to use command-line Migration solution for [PostgreSQL](ht
 
 ## Features
 
-<img align="right" width="256" height="256" src="http://3.bp.blogspot.com/-IsgA8HsxwNw/UxlookvyH_I/AAAAAAAAUhI/TNysqLuoJ8o/s1600/pg-migrator.png">
+<img align="right" width="256" height="256" src="http://3.bp.blogspot.com/-Tf2kfzVXgNA/UxuDUUo65qI/AAAAAAAAUhY/-3c6u9xTWGI/s1600/pg-migrator.png">
 
   * Auto migration from scratch to up to date
   * Step by step forward migration
@@ -69,11 +69,11 @@ You can find sample migration script file in the "examples" folder
 
 ## Step by Step Example
 
-Let's go step by step from the scratch.
+Let's go step by step from the scratch. You can find all migration scripts we will use during this example in the "examples" folder on Github.
 
 As a first step, we need a database. Let's create a new database with "testdb" name. At the moment, there is no table this db.
 
-IMAGE
+<img src="http://4.bp.blogspot.com/-Z8FWbyIugPc/UxuDiKP1XsI/AAAAAAAAUhg/gTEX0l8QGSg/s1600/Selection_001.png">
 
 As a beginning to development, we need two tables, "user" and "user_login_history". Let's write some script to create them but don't execute it yet. We'll use pg-migratior for execution.
 
@@ -147,7 +147,7 @@ Ok, let's continue to development. At this time, we need to add a new column to 
 ALTER TABLE "user"
   ADD COLUMN is_admin bit;
 
-UPDATE "user" SET is_admin = '0'
+UPDATE "user" SET is_admin = '0';
 
 ALTER TABLE "user"
    ALTER COLUMN is_admin SET NOT NULL;
@@ -186,7 +186,7 @@ INSERT INTO "company"(company_name)
 ALTER TABLE "user"
   ADD COLUMN company_id integer;
 
-UPDATE "user" SET company_id = 1
+UPDATE "user" SET company_id = 1;
 
 ALTER TABLE "user"
    ALTER COLUMN company_id SET NOT NULL;
@@ -235,14 +235,66 @@ DROP INDEX ix_company;
 
 ```
 
-That all. We can start to use pg-migrator now. Because pg-migrator can seek and execute migration script in any subfolders, I will categorize scripts like below.
+That all. We can start to use pg-migrator now. Because pg-migrator can seek and execute migration script in any subfolders, we are free to organize script files as we wish, so I will categorize scripts with folders like below.
 
-IMAGE
+<img src="http://2.bp.blogspot.com/-IKNe2qrQLGI/UxuDktqwTZI/AAAAAAAAUho/rZ4PbbsTagk/s1600/Selection_002.png">
+
+I have created some script files in "ignored-files" folder. All files in this folder will be ignored by pg-migrator because of "x-y.sql" naming standard.
+
+Let's open a terminal and go into the scripts' root folder and type following command (I have a db user with "test" username and "test" password).
+
+    $ pg-migrator postgres://test:test@localhost/testdb
+
+<img src="http://2.bp.blogspot.com/-pRNtmsL6IjA/UxuDoYm3lrI/AAAAAAAAUhw/wJgssYZlD7g/s1600/Selection_003.png">
+
+What happend? All scripts are executed by pg-migratior with "1-2.sql" -> "2-3.sql" -> "3-4.sql" -> "4-5.sql" order. At the moment, db should seem like below.
+
+<img src="http://1.bp.blogspot.com/-h3HujYMJ__w/UxuDrOnkc0I/AAAAAAAAUh4/-1Wf85MCl64/s1600/Selection_004.png">
+
+All tables and indexes have been created and data inserted. Did you realized a new table with "version" name?
+
+This table belongs to pg-migrator and used to track current db version. There are some other migration tools that track the db current version in some files but this is not reasonable actually. Because these files can easy be deleted or go out of sync with DB. What about if you have multiple servers? I'm strongly recommend track the current version in db because this is the only secure place against out of sync.
+
+Ok, db on version 5 at the moment. But we decided to remove indexes so roll one version back. We can use following command for this task.
+
+    $ pg-migrator postgres://test:test@localhost/testdb -1
+
+<img src="http://2.bp.blogspot.com/-Q6jMQDdXt6Q/UxuDtzQBqsI/AAAAAAAAUiA/fbwOfTT5SDM/s1600/Selection_005.png">
+
+pg-migrator finds and executes "5-4.sql" script and roll back db to version 4.
+
+<img src="http://1.bp.blogspot.com/-iM5Ie74yH2E/UxuD8CZPmrI/AAAAAAAAUiI/yqhwDlAeIRg/s1600/Selection_006.png">
+
+At this time, we decided to move db to version 2.  We can use following command for this task.
+
+    $ pg-migrator postgres://test:test@localhost/testdb 2
+
+<img src="http://4.bp.blogspot.com/-fsTHTBPldp8/UxuD_cr9mpI/AAAAAAAAUiQ/xLzJdLsGUsM/s1600/Selection_007.png">
+
+pg-migrator finds and executes "4-3.sql" and then "3-2.sql" scripts and roll back db to version 2.
+
+<img src="http://3.bp.blogspot.com/-fVAQAe44dis/UxuECcqdRoI/AAAAAAAAUiY/wZX6D5ioP4k/s1600/Selection_008.png">
+
+Not bad ha, what's next? Let's go to one step forward with folloeing command.
+
+    $ pg-migrator postgres://test:test@localhost/testdb +1
+
+<img src="http://2.bp.blogspot.com/-TE5arKQF_SM/UxuEGNSDGmI/AAAAAAAAUig/VtdSP4m1gUQ/s1600/Selection_009.png">
+
+pg-migrator finds and executes "2-3.sql" and migrate db to version 3.
+
+<img src="http://4.bp.blogspot.com/-ul_B3WaCGXc/UxuEJKm0aLI/AAAAAAAAUio/yL8ojBtThUc/s1600/Selection_010.png">
+
+Ok, that's enough. let's return to the latest version with the following command.
+
+    $ pg-migrator postgres://test:test@localhost/testdb
+
+<img src="http://4.bp.blogspot.com/-tqD_3x5hH18/UxuEPzfNlaI/AAAAAAAAUiw/0MsT9u_JH4g/s1600/Selection_011.png">
+
+<img src="http://3.bp.blogspot.com/-Xxl41LWmAPo/UxuETU8A4OI/AAAAAAAAUi4/cf6151-lf2w/s1600/Selection_012.png">
 
 
-
-
-
+Fire at will! You can take a stroll between db versions with pg-migrator.
 
 ## Common Pitfalls
 * pg-migrator must be executed in the root of migration scripts folder. It will search all directory content and all subfolders content recursively.

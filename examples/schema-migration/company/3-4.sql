@@ -17,7 +17,7 @@ INSERT INTO "company"(company_name)
 ALTER TABLE "user"
   ADD COLUMN company_id integer;
 
-UPDATE "user" SET company_id = 1
+UPDATE "user" SET company_id = 1;
 
 ALTER TABLE "user"
    ALTER COLUMN company_id SET NOT NULL;
