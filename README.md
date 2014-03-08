@@ -3,6 +3,8 @@ pg-migrator
 
 The complete and easy to use command-line migration tool for [PostgreSQL](http://www.postgresql.org/).
 
+ [![Build Status](https://travis-ci.org/leventkaragol/pg-migrator.png?branch=master)](https://travis-ci.org/leventkaragol/pg-migrator)
+
 ## Features
 
 <img align="right" width="256" height="256" src="http://3.bp.blogspot.com/-Tf2kfzVXgNA/UxuDUUo65qI/AAAAAAAAUhY/-3c6u9xTWGI/s1600/pg-migrator.png">
