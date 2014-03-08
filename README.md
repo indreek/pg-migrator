@@ -135,7 +135,7 @@ DROP TABLE "user";
 
 ```
 
-That was quite easy, just deleted all the tables. We'll save this script with "**2-1.sql**". When this script executed, our database will be migrated from version 2 to version 1 (Backward migration).
+That was quite easy, just deleted all the tables. We'll save this script as "**2-1.sql**". When this script executed, our database will be migrated from version 2 to version 1 (Backward migration).
 
 Ok, let's continue to development. At this time, we need to add a new column to user table with "is_admin" name so write the script below and save it as "**2-3.sql**".
 
