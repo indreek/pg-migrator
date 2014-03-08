@@ -69,7 +69,7 @@ For backward migration, you must also have files like "2-1.sql" and go on like "
 
 Let's go step by step from the scratch. You can find all migration scripts we will use during this example in the ["examples"](https://github.com/leventkaragol/pg-migrator/tree/master/examples/) folder on Github.
 
-As a first step, we need a database. Let's create a new database with "testdb" name. At the moment, there is no table in it.
+As a first step, we need a database. Let's create a new one with "testdb" name. At the moment, there is no table in it.
 
 <img src="http://4.bp.blogspot.com/-Z8FWbyIugPc/UxuDiKP1XsI/AAAAAAAAUhg/gTEX0l8QGSg/s1600/Selection_001.png">
 
