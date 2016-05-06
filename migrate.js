@@ -15,8 +15,9 @@ colors.setTheme({
 
 function migrate (options) {
     var connectionString = options.connectionString;
-    var targetVersion = options.targetVersion || 0;
-    var currentPath = options.path || '.';
+    var targetVersion    = options.targetVersion || 0;
+    var currentPath      = options.path || '.';
+    var versionTable     = options.versionTable || 'public.version';
 
     var connection;
     var currentPersister;
@@ -35,7 +36,7 @@ function migrate (options) {
             return currentPersister.query("BEGIN TRANSACTION");
         })
         .then(function () {
-            return getMigrationService(currentPersister).migrate(currentPath, targetVersion);
+            return getMigrationService(currentPersister, versionTable).migrate(currentPath, targetVersion);
         })
         .then(function (curVer) {
 
@@ -69,7 +70,7 @@ function migrate (options) {
         });
 }
 
-var getMigrationService = function (persister) {
+var getMigrationService = function (persister, versionTable) {
 
     var MigratiorService = require("./lib/application/service/migrator-service");
     var ScriptService = require("./lib/domain/service/script-service");
@@ -80,7 +81,7 @@ var getMigrationService = function (persister) {
     // Service definition with dependency injection
     return new MigratiorService(
         new ScriptService(new ScriptRepository(fs, persister), path),
-        new VersionService(new VersionRepository(persister), messages),
+        new VersionService(new VersionRepository(persister, versionTable), messages),
         messages);
 };
 

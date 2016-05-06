@@ -11,7 +11,8 @@ Also can be called directly via function call if you runing gulp or grunt.
     migrate({
             connectionString: connectionString,
             targetVersion: 5, // optional
-            path: './migrations' // migration scripts directory
+            path: './migrations', // migration scripts directory
+            versionTable: 'myschema.mytable' // or 'mytable' //optional, allows you to specify schema and tablename. You can specify only tablename.
         })
         .then(function () {
             // migration completed
